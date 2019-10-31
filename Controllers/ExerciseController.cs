@@ -37,7 +37,7 @@ namespace StudentExercises.Controllers
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT Id, Title, ProgramLanguage FROM Exercise";
+                    cmd.CommandText = "SELECT Id, Name, Language FROM Exercise";
                     SqlDataReader reader = cmd.ExecuteReader();
                     List<Exercise> exercises = new List<Exercise>();
 
@@ -46,8 +46,8 @@ namespace StudentExercises.Controllers
                         Exercise exercise = new Exercise
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                            Name = reader.GetString(reader.GetOrdinal("title")),
-                            Language = reader.GetString(reader.GetOrdinal("programLanguage"))
+                            Name = reader.GetString(reader.GetOrdinal("name")),
+                            Language = reader.GetString(reader.GetOrdinal("language"))
                         };
                         exercises.Add(exercise);
                     }
@@ -68,7 +68,7 @@ namespace StudentExercises.Controllers
                 {
                     cmd.CommandText = @"
                         SELECT
-                            Id, Title, ProgramLanguage
+                            Id, Name, Language
                         FROM Exercise
                         WHERE Id = @id";
                     cmd.Parameters.Add(new SqlParameter("@id", id));
@@ -81,8 +81,8 @@ namespace StudentExercises.Controllers
                         exercise = new Exercise
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                            Name = reader.GetString(reader.GetOrdinal("Title")),
-                            Language = reader.GetString(reader.GetOrdinal("ProgramLanguage"))
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
+                            Language = reader.GetString(reader.GetOrdinal("Language"))
                         };
                     }
                     reader.Close();
@@ -138,7 +138,7 @@ namespace StudentExercises.Controllers
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT Id, Title, ProgramLanguage
+                        SELECT Id, Name, Language
                         FROM Exercise
                         WHERE Id = @id";
                     cmd.Parameters.Add(new SqlParameter("@id", id));
