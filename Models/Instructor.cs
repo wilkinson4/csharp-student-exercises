@@ -7,20 +7,13 @@ namespace StudentExercises.Models
 {
     public class Instructor
     {
-        public Instructor(string first, string last, Cohort cohort)
-        {
-            FirstName = first;
-            LastName = last;
-            InstructorsCohort = cohort;
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string SlackHandle { get; set; }
 
-        }
-        public string FirstName { get; }
-        public string LastName { get; }
-        public string SlackHandle { get; }
-
-        public Cohort InstructorsCohort { get; set; }
-        public string Specialty { get; set; }
-
+        public int CohortId { get; set; }
+        public Cohort Cohort { get; set; } = new Cohort();
         public void AssignExercise(Student student, Exercise exercise)
         {
             student.Exercises.Add(exercise);

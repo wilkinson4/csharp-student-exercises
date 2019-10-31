@@ -11,7 +11,7 @@ namespace StudentExercises.Models
         public string Language { get; set; }
         public int Id { get; set; }
 
-        public List<Student> Students { get; }
+        public List<Student> Students { get; set; } = new List<Student>();
 
         public void PrintStudentsAssigned()
         {

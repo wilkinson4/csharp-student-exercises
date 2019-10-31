@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,20 +8,19 @@ namespace StudentExercises.Models
 {
     public class Student
     {
-        public Student(string first, string last, string slack, Cohort cohort)
-        {
-            FirstName = first;
-            LastName = last;
-            SlackHandle = slack;
-            Exercises = new List<Exercise>();
-            StudentsCohort = cohort;
-        }
-        public string FirstName { get; }
-        public string LastName { get; }
-        public string SlackHandle { get; }
+        public int Id { get; set; }
+        [Required]
+        [StringLength (50, MinimumLength = 2)]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+        [Required]
+        public string SlackHandle { get; set; }
+        [Required]
+        public int CohortId { get; set; }
 
-        public Cohort StudentsCohort { get; }
+        public Cohort Cohort { get; set; }
 
-        public List<Exercise> Exercises { get; }
+        public List<Exercise> Exercises { get; set; } = new List<Exercise>();
     }
 }

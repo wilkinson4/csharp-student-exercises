@@ -7,15 +7,10 @@ namespace StudentExercises.Models
 {
     public class Cohort
     {
-        public Cohort(string name)
-        {
-            Name = name;
-            Students = new List<Student>();
-            Instructors = new List<Instructor>();
-        }
-        public string Name { get; }
+        public int Id { get; set; }
+        public string Name { get; set; }
 
-        public List<Student> Students { get; }
-        public List<Instructor> Instructors { get; }
+        public List<Student> Students { get; } = new List<Student>();
+        public List<Instructor> Instructors { get; } = new List<Instructor>();
     }
 }
