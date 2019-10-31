@@ -35,7 +35,9 @@
 
 --INSERT INTO Student (FirstName, LastName, SlackHandle, CohortId) Values('Bobby', 'Brady', '@bobby', 1);
 --INSERT INTO Student(FirstName, LastName, SlackHandle, CohortId) Values('Noah', 'Bartfield', '@noah', 2);
---INSERT INTO Student(FirstName, LastName, SlackHandle, CohortId) Values('Michael', 'Styles', '@michael', 3);
+--INSERT INTO Student(FirstName, LastName, SlackHandle, CohortId) Values('Kelly', 'Coles', '@kelly', 3);
+--INSERT INTO Student(FirstName, LastName, SlackHandle, CohortId) Values('Sarah', 'Flemming', '@sarah', 1);
+--INSERT INTO Student(FirstName, LastName, SlackHandle, CohortId) Values('Matthew', 'Ross', '@matthew', 2);
 
 --CREATE TABLE Exercise (
 --    Id INTEGER NOT NULL PRIMARY KEY IDENTITY,
@@ -49,11 +51,11 @@
 --INSERT INTO Exercise (Name, Language) VALUES ('Classes', 'C#');
 --INSERT INTO Exercise (Name, Language) VALUES ('Interfaces', 'C#');
 
-SELECT s.Id, s.FirstName, s.LastName, s.SlackHandle, s.CohortId, se.ExerciseId, c.Name AS CohortName, e.Name AS ExerciseName, e.Language FROM Student s 
-INNER JOIN Cohort c 
-ON s.CohortId = c.Id
-LEFT JOIN StudentExercise se ON se.StudentId = s.Id
-LEFT JOIN Exercise e ON se.ExerciseId = e.Id;
+--SELECT s.Id, s.FirstName, s.LastName, s.SlackHandle, s.CohortId, se.ExerciseId, c.Name AS CohortName, e.Name AS ExerciseName, e.Language FROM Student s 
+--INNER JOIN Cohort c 
+--ON s.CohortId = c.Id
+--LEFT JOIN StudentExercise se ON se.StudentId = s.Id
+--LEFT JOIN Exercise e ON se.ExerciseId = e.Id;
 
 --CREATE TABLE StudentExercise (
 --    Id INTEGER NOT NULL PRIMARY KEY IDENTITY,
@@ -63,7 +65,38 @@ LEFT JOIN Exercise e ON se.ExerciseId = e.Id;
 --    CONSTRAINT FK_StudentExercise_Student FOREIGN KEY(StudentId) REFERENCES Student(Id),
 --);
 
---INSERT INTO StudentExercise (ExerciseId, StudentId) VALUES ('1','2');
---INSERT INTO StudentExercise (ExerciseId, StudentId) VALUES ('2','1');
---INSERT INTO StudentExercise (ExerciseId, StudentId) VALUES ('3','3');
+--INSERT INTO StudentExercise (ExerciseId, StudentId) VALUES ('4','2');
+--INSERT INTO StudentExercise (ExerciseId, StudentId) VALUES ('5','1');
+--INSERT INTO StudentExercise (ExerciseId, StudentId) VALUES ('6','3');
 
+
+--SELECT s.Id AS TheStudentId, s.FirstName AS StudentFirst, s.LastName AS StudentLast, s.SlackHandle AS StudentSlack, 
+--c.Id AS CohortId, c.Name AS CohortName, 
+--i.Id AS InstructorId, i.FirstName AS InstructorFirst, i.LastName AS InstructorLast, i.SlackHandle AS InstructorSlack,
+--se.ExerciseId, se.StudentId,
+--e.Name AS ExerciseName, e.Language
+--FROM Cohort c 
+--INNER JOIN Student s 
+--ON s.CohortId = c.Id
+--INNER Join Instructor i
+--ON i.CohortId = c.Id
+--LEFT JOIN StudentExercise se ON se.StudentId = s.Id
+--LEFT JOIN Exercise e ON se.ExerciseId = e.Id;
+
+--SELECT s.Id, s.FirstName, s.LastName, s.SlackHandle, s.CohortId, c.Name AS CohortName 
+--                                        FROM Student s 
+--                                        INNER JOIN Cohort c 
+--                                        ON s.CohortId = c.Id
+
+--SELECT s.Id AS TheStudentId, s.FirstName AS StudentFirst, s.LastName AS StudentLast, s.SlackHandle AS StudentSlack, 
+--                                        c.Id AS CohortId, c.Name AS CohortName, 
+--                                        i.Id AS InstructorId, i.FirstName AS InstructorFirst, i.LastName AS InstructorLast, i.SlackHandle AS InstructorSlack,
+--                                        se.ExerciseId, se.StudentId,
+--                                        e.Name AS ExerciseName, e.Language
+--                                        FROM Cohort c 
+--                                        INNER JOIN Student s 
+--                                        ON s.CohortId = c.Id
+--                                        INNER Join Instructor i
+--                                        ON i.CohortId = c.Id
+--                                        LEFT JOIN StudentExercise se ON se.StudentId = s.Id
+--                                        LEFT JOIN Exercise e ON se.ExerciseId = e.Id;
