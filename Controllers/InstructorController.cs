@@ -30,31 +30,61 @@ namespace StudentExercises.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string q)
         {
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT Id, FirstName, LastName, SlackHandle, CohortId FROM Instructor";
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    List<Instructor> exercises = new List<Instructor>();
-
-                    while (reader.Read())
+                    if (q != null)
                     {
-                        Instructor exercise = new Instructor
-                        {
-                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
-                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
-                            CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
-                        };
-                        exercises.Add(exercise);
-                    }
-                    reader.Close();
+                        cmd.CommandText = @"SELECT Id, FirstName, LastName, SlackHandle, CohortId 
+                                          FROM Instructor
+                                          WHERE FirstName LIKE @searchString
+                                          OR LastName LIKE @searchString
+                                          OR SlackHandle LIKE @searchString";
+                        cmd.Parameters.Add(new SqlParameter("@searchString", "%" + q + "%"));
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        List<Instructor> exercises = new List<Instructor>();
 
-                    return Ok(exercises);
+                        while (reader.Read())
+                        {
+                            Instructor exercise = new Instructor
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
+                            };
+                            exercises.Add(exercise);
+                        }
+                        reader.Close();
+
+                        return Ok(exercises);
+                    }
+                    else
+                    {
+                        cmd.CommandText = "SELECT Id, FirstName, LastName, SlackHandle, CohortId " +
+                                          "FROM Instructor";
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        List<Instructor> exercises = new List<Instructor>();
+
+                        while (reader.Read())
+                        {
+                            Instructor exercise = new Instructor
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
+                            };
+                            exercises.Add(exercise);
+                        }
+                        reader.Close();
+
+                        return Ok(exercises);
+                    }
                 }
             }
         }

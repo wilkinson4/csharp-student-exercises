@@ -30,7 +30,7 @@ namespace StudentExercises.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string include)
+        public async Task<IActionResult> Get(string include, string q)
         {
             using (SqlConnection conn = Connection)
             {
@@ -71,6 +71,31 @@ namespace StudentExercises.Controllers
                         }
                         reader.Close();
 
+                        return Ok(exercises.Values);
+                    }
+                    else if (q != null)
+                    {
+                        cmd.CommandText = @"SELECT Id AS ExerciseId, Name, Language
+                                            FROM Exercise
+                                            WHERE Name LIKE @searchString
+                                            OR Language LIKE @searchString;";
+                     
+                        cmd.Parameters.Add(new SqlParameter("@searchString", "%" + q + "%"));
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        Dictionary<int, Exercise> exercises = new Dictionary<int, Exercise>();
+
+                        while (reader.Read())
+                        {
+                            int exerciseId = reader.GetInt32(reader.GetOrdinal("ExerciseId"));
+                            if (!exercises.ContainsKey(exerciseId))
+                            {
+                                Exercise exercise = GetExercise(reader, exerciseId);
+                                exercises.Add(exerciseId, exercise);
+                            }
+                        }
+                        reader.Close();
                         return Ok(exercises.Values);
                     }
                     else

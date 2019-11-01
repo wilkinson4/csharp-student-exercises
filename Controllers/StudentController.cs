@@ -30,7 +30,7 @@ namespace StudentExercises.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string include)
+        public async Task<IActionResult> Get(string include, string q)
         {
             using (SqlConnection conn = Connection)
             {
@@ -70,6 +70,34 @@ namespace StudentExercises.Controllers
                                 fromDictionary.Exercises.Add(exercise);
                             }
                         }
+                        reader.Close();
+
+                        return Ok(students.Values);
+                    }
+                    else if (q != null)
+                    {
+                        cmd.CommandText = @"SELECT s.Id, s.FirstName, s.LastName, s.SlackHandle, s.CohortId, c.Name AS CohortName 
+                                        FROM Student s 
+                                        INNER JOIN Cohort c 
+                                        ON s.CohortId = c.Id
+                                        WHERE s.FirstName LIKE @searchString
+                                        OR s.LastName LIKE @searchString
+                                        OR s.SlackHandle LIKE @searchString";
+
+                        cmd.Parameters.Add(new SqlParameter("@searchString", "%" + q + "%"));
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        Dictionary<int, Student> students = new Dictionary<int, Student>();
+                        while (reader.Read())
+                        {
+                            int studentId = reader.GetInt32(reader.GetOrdinal("Id"));
+                            if (!students.ContainsKey(studentId))
+                            {
+                                students.Add(studentId, GetStudent(reader, studentId));
+                            }
+                        }
+
                         reader.Close();
 
                         return Ok(students.Values);
