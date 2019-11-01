@@ -100,3 +100,10 @@
 --                                        ON i.CohortId = c.Id
 --                                        LEFT JOIN StudentExercise se ON se.StudentId = s.Id
 --                                        LEFT JOIN Exercise e ON se.ExerciseId = e.Id;
+
+SELECT e.Id AS TheExerciseId, e.Name, e.Language, s.Id AS StudentId, s.FirstName, s.LastName, s.SlackHandle 
+FROM Exercise e
+INNER JOIN StudentExercise se
+ON e.Id = se.ExerciseId
+INNER JOIN Student s
+ON s.Id = se.StudentId
