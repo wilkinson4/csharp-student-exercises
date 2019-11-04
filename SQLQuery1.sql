@@ -113,5 +113,9 @@
 --WHERE Name LIKE '%j%' 
 --OR Language LIKE '%j%';
 
-SELECT Id, Name FROM Cohort
-WHERE Name LIKE '%c%';
+--SELECT Id, Name FROM Cohort
+--WHERE Name LIKE '%c%';
+
+UPDATE Exercise
+SET Name = 'Arrays', Language = 'JavaScript'
+WHERE id = 1;

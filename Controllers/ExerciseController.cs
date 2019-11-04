@@ -79,7 +79,7 @@ namespace StudentExercises.Controllers
                                             FROM Exercise
                                             WHERE Name LIKE @searchString
                                             OR Language LIKE @searchString;";
-                     
+
                         cmd.Parameters.Add(new SqlParameter("@searchString", "%" + q + "%"));
 
                         SqlDataReader reader = cmd.ExecuteReader();
@@ -195,6 +195,45 @@ namespace StudentExercises.Controllers
                 }
             }
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] Exercise exercise)
+        {
+            try
+            {
+                using (SqlConnection conn = Connection)
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"UPDATE Exercise
+                                            SET Name = @name, Language = @language
+                                            WHERE id = @id";
+
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                        cmd.Parameters.Add(new SqlParameter("@name", exercise.Name));
+                        cmd.Parameters.Add(new SqlParameter("@language", exercise.Language));
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        if (rowsAffected > 0)
+                        {
+                            return Ok(exercise);
+                        }
+                        throw new Exception("No rows affected");
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                if (!ExerciseExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
         private bool ExerciseExists(int id)
         {
             using (SqlConnection conn = Connection)
@@ -210,6 +249,26 @@ namespace StudentExercises.Controllers
 
                     SqlDataReader reader = cmd.ExecuteReader();
                     return reader.Read();
+                }
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Exercise exercise)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO EXERCISE (Name, Language)
+                                        OUTPUT INSERTED.Id
+                                        VALUES (@name, @language)";
+                    cmd.Parameters.Add(new SqlParameter("@name", exercise.Name));
+                    cmd.Parameters.Add(new SqlParameter("@language", exercise.Language));
+                    int newId = (int)cmd.ExecuteScalar();
+                    exercise.Id = newId;
+                    return CreatedAtRoute("GetExercise", new { id = newId }, exercise);
                 }
             }
         }
